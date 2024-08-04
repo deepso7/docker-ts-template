@@ -1,0 +1,7 @@
+services:
+  ramen:
+    build:
+      context: .
+      target: prod
+    ports:
+      - "4269:4269"

@@ -1,0 +1,15 @@
+services:
+  ramen:
+    build:
+      context: .
+      target: dev
+    ports:
+      - "4269:4269"
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: 
+      - pnpm
+      - dev
