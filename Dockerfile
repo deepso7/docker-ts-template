@@ -17,7 +17,7 @@ RUN pnpm i
 
 COPY . .
 
-RUN pnpm build
+CMD [ "pnpm", "build" ]
 
 # prod image for running in prod env
 FROM base as prod
