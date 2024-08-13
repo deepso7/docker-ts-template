@@ -7,17 +7,22 @@ RUN corepack enable
 
 WORKDIR /usr/src/app
 
-# dev image for building the app
-FROM base as dev
+FROM base as install
 
 COPY package.json .
 COPY pnpm-lock.yaml .
 
 RUN pnpm i
 
+# stage for development
+FROM install as dev
 COPY . .
+CMD [ "pnpm", "dev" ]
 
-CMD [ "pnpm", "build" ]
+# stage for building the app
+FROM install as build
+COPY . .
+RUN pnpm build
 
 # prod image for running in prod env
 FROM base as prod
@@ -29,7 +34,7 @@ COPY pnpm-lock.yaml .
 
 RUN pnpm i --prod --frozen-lockfile
 
-COPY --from=dev /usr/src/app/dist ./dist
+COPY --from=build /usr/src/app/dist ./dist
 
 CMD [ "node", "dist/index.js" ]
 
